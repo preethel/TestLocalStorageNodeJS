@@ -1,195 +1,193 @@
+const modalCloseButton = document.getElementById("closeModal");
+
 var currentPage = 1;
-let showList ;
-document.addEventListener('DOMContentLoaded', () => {
+let showList;
+document.addEventListener("DOMContentLoaded", () => {
+	var userListElement = document.getElementById("userList");
+	var paginationElement = document.getElementById("pagination");
+	var searchButton = document.getElementById("searchForm");
+	searchForm;
+	var itemsPerPage = 2;
 
-    
-var userListElement = document.getElementById("userList");
-var paginationElement = document.getElementById("pagination");
-var searchButton = document.getElementById("searchForm");
-searchForm
-var itemsPerPage = 2;
+	var buttonsToShow = 3;
 
-var buttonsToShow = 3;
+	showList = function () {
+		var users = JSON.parse(localStorage.getItem("formData")) || [];
+		userListElement.innerHTML = "";
+		var totalItem = users.length;
+		var startIndex = (currentPage - 1) * itemsPerPage;
+		console.log("start Index =>", startIndex);
+		console.log("Current page =>", currentPage);
+		var endIndex = startIndex + itemsPerPage;
+		var paginatedData = users.slice(startIndex, endIndex);
 
-showList = function () {
-	var users = JSON.parse(localStorage.getItem("formData")) || [];
-	userListElement.innerHTML = "";
-	var totalItem = users.length;
-	var startIndex = (currentPage - 1) * itemsPerPage;
-	console.log("start Index =>",startIndex);
-	console.log("Current page =>",currentPage);
-	var endIndex = startIndex + itemsPerPage;
-	var paginatedData = users.slice(startIndex, endIndex);
+		var searchedUser = searchEntries(searchItem);
+		if (searchedUser != 0) {
+			paginatedData = searchedUser.slice(startIndex, endIndex);
+			totalItem = searchedUser.length;
+		}
 
-	var searchedUser = searchEntries(searchItem);
-	if(searchedUser != 0){
-		paginatedData = searchedUser.slice(startIndex, endIndex);
-		totalItem = searchedUser.length;
-	}
+		paginatedData.forEach(function (entry, index) {
+			// existing code to create table rows
+			var row = document.createElement("tr");
+			var nameCell = document.createElement("td");
+			var fname = entry.fristName;
+			var lname = entry.lastName;
 
+			var name = fname.concat(" " + lname);
 
-	paginatedData.forEach(function (entry, index) {
-		// existing code to create table rows
-		var row = document.createElement("tr");
-		var nameCell = document.createElement("td");
-		var fname = entry.fristName;
-		var lname = entry.lastName;
+			nameCell.textContent = name;
+			var emailCell = document.createElement("td");
+			emailCell.textContent = entry.email;
+			var phoneCell = document.createElement("td");
+			phoneCell.textContent = entry.phone;
+			var dobCell = document.createElement("td");
+			dobCell.textContent = entry.dateOfBrith;
+			var genderCell = document.createElement("td");
+			genderCell.textContent = entry.gender;
 
-		var name = fname.concat(" " + lname);
+			var actionsCell = document.createElement("td");
+			var editButton = document.createElement("button");
+			editButton.textContent = "Edit";
+			editButton.classList.add("btn", "btn-primary", "mr-2");
+			editButton.setAttribute("data-toggle", "modal");
+			editButton.setAttribute("data-target", "#editModal");
+			editButton.addEventListener("click", function () {
+				openEditModal(index);
+			});
 
-		nameCell.textContent = name;
-		var emailCell = document.createElement("td");
-		emailCell.textContent = entry.email;
-		var phoneCell = document.createElement("td");
-		phoneCell.textContent = entry.phone;
-		var dobCell = document.createElement("td");
-		dobCell.textContent = entry.dateOfBrith;
-		var genderCell = document.createElement("td");
-		genderCell.textContent = entry.gender;
+			var deleteButton = document.createElement("button");
+			deleteButton.textContent = "Delete";
+			deleteButton.classList.add("btn", "btn-danger");
+			deleteButton.addEventListener("click", function () {
+				deleteEntry(index);
+			});
 
-		var actionsCell = document.createElement("td");
-		var editButton = document.createElement("button");
-		editButton.textContent = "Edit";
-		editButton.classList.add("btn", "btn-primary", "mr-2");
-		editButton.setAttribute("data-toggle", "modal");
-		editButton.setAttribute("data-target", "#editModal");
-		editButton.addEventListener("click", function () {
-			openEditModal(index);
+			actionsCell.appendChild(editButton);
+			actionsCell.appendChild(deleteButton);
+
+			row.appendChild(nameCell);
+			row.appendChild(emailCell);
+			row.appendChild(phoneCell);
+			row.appendChild(dobCell);
+			row.appendChild(genderCell);
+			row.appendChild(actionsCell);
+			userList.appendChild(row);
 		});
+		renderPagination(totalItem, currentPage, itemsPerPage);
+	};
+	showList();
 
-		var deleteButton = document.createElement("button");
-		deleteButton.textContent = "Delete";
-		deleteButton.classList.add("btn", "btn-danger");
-		deleteButton.addEventListener("click", function () {
-			deleteEntry(index);
-		});
+	function renderPagination(totalItem, currentPage, itemsPerPage) {
+		paginationElement.innerHTML = "";
+		// var totalItem = users.length;
+		var totalPages = Math.ceil(totalItem / itemsPerPage);
+		var startPage = Math.max(1, currentPage - Math.floor(buttonsToShow / 2));
+		var endPage = Math.min(startPage + buttonsToShow - 1, totalPages);
 
-		actionsCell.appendChild(editButton);
-		actionsCell.appendChild(deleteButton);
+		var morePagesbuttonPrev = document.createElement("span");
+		var morePagesbuttonNext = document.createElement("span");
 
-		row.appendChild(nameCell);
-		row.appendChild(emailCell);
-		row.appendChild(phoneCell);
-		row.appendChild(dobCell);
-		row.appendChild(genderCell);
-		row.appendChild(actionsCell);
-		userList.appendChild(row);
-	});
-	renderPagination(totalItem, currentPage, itemsPerPage);
-}
-showList();
+		morePagesbuttonPrev.textContent = "...";
+		morePagesbuttonPrev.className = "pagination-button";
+		morePagesbuttonNext.textContent = "...";
+		morePagesbuttonNext.className = "pagination-button";
 
-function renderPagination(totalItem, currentPage, itemsPerPage) {
-	paginationElement.innerHTML = "";
-	// var totalItem = users.length;
-	var totalPages = Math.ceil(totalItem / itemsPerPage);
-	var startPage = Math.max(1, currentPage - Math.floor(buttonsToShow / 2));
-	var endPage = Math.min(startPage + buttonsToShow - 1, totalPages);
-
-	var morePagesbuttonPrev = document.createElement("span");
-	var morePagesbuttonNext = document.createElement("span");
-
-	morePagesbuttonPrev.textContent = "...";
-	morePagesbuttonPrev.className = "pagination-button";
-	morePagesbuttonNext.textContent = "...";
-	morePagesbuttonNext.className = "pagination-button";
-
-	if (startPage > 1) {
-		var firstButton = document.createElement("a");
-		firstButton.href = "#";
-		firstButton.textContent = "1";
-		firstButton.classList.add("pagination-button");
-		firstButton.addEventListener("click", function (event) {
-			event.preventDefault();
-			window.currentPage = 1;
-			showList();
-			renderPagination(totalItem, window.currentPage, itemsPerPage);
-		});
-
-		if (startPage > 2) {
-			var prevButton = document.createElement("a");
-			prevButton.href = "#";
-			prevButton.textContent = "<";
-			prevButton.classList.add("pagination-button");
-			prevButton.addEventListener("click", function (event) {
+		if (startPage > 1) {
+			var firstButton = document.createElement("a");
+			firstButton.href = "#";
+			firstButton.textContent = "1";
+			firstButton.classList.add("pagination-button");
+			firstButton.addEventListener("click", function (event) {
 				event.preventDefault();
-				window.currentPage = window.currentPage - 1;
+				window.currentPage = 1;
 				showList();
 				renderPagination(totalItem, window.currentPage, itemsPerPage);
 			});
-			paginationElement.appendChild(prevButton);
+
+			if (startPage > 2) {
+				var prevButton = document.createElement("a");
+				prevButton.href = "#";
+				prevButton.textContent = "<";
+				prevButton.classList.add("pagination-button");
+				prevButton.addEventListener("click", function (event) {
+					event.preventDefault();
+					window.currentPage = window.currentPage - 1;
+					showList();
+					renderPagination(totalItem, window.currentPage, itemsPerPage);
+				});
+				paginationElement.appendChild(prevButton);
+			}
+			paginationElement.appendChild(firstButton);
+			paginationElement.appendChild(morePagesbuttonPrev);
 		}
-		paginationElement.appendChild(firstButton);
-		paginationElement.appendChild(morePagesbuttonPrev);
-	}
 
-	for (var i = startPage; i <= endPage; i++) {
-		var pageLink = document.createElement("a");
-		pageLink.href = "#";
-		pageLink.textContent = i;
-		pageLink.className = "pagination-button";
+		for (var i = startPage; i <= endPage; i++) {
+			var pageLink = document.createElement("a");
+			pageLink.href = "#";
+			pageLink.textContent = i;
+			pageLink.className = "pagination-button";
 
-		if (i === window.currentPage) {
-			pageLink.classList.add("active");
+			if (i === window.currentPage) {
+				pageLink.classList.add("active");
+			}
+
+			pageLink.addEventListener("click", function (event) {
+				event.preventDefault();
+				window.currentPage = parseInt(event.target.textContent);
+				console.log("current Page next", window.currentPage);
+				showList();
+				renderPagination(totalItem, window.currentPage, itemsPerPage);
+			});
+
+			paginationElement.appendChild(pageLink);
 		}
 
-		pageLink.addEventListener("click", function (event) {
-			event.preventDefault();
-			window.currentPage = parseInt(event.target.textContent);
-			console.log("current Page next", window.currentPage);
-			showList();
-			renderPagination(totalItem, window.currentPage, itemsPerPage);
-		});
+		if (endPage < totalPages) {
+			var nextButton = document.createElement("a");
+			nextButton.href = "#";
+			nextButton.textContent = ">";
+			nextButton.classList.add("pagination-button");
+			nextButton.addEventListener("click", function (event) {
+				event.preventDefault();
+				window.currentPage = window.currentPage + 1;
+				showList();
+				renderPagination(totalItem, window.currentPage, itemsPerPage);
+			});
+		}
 
-		paginationElement.appendChild(pageLink);
+		if (endPage < totalPages) {
+			var lastButton = document.createElement("a");
+			lastButton.href = "#";
+			lastButton.textContent = totalPages;
+			lastButton.classList.add("pagination-button");
+			lastButton.addEventListener("click", function (event) {
+				event.preventDefault();
+				window.currentPage = totalPages;
+				showList();
+				renderPagination(totalItem, window.currentPage, itemsPerPage);
+			});
+			paginationElement.appendChild(morePagesbuttonNext);
+			paginationElement.appendChild(lastButton);
+			paginationElement.appendChild(nextButton);
+		}
 	}
 
-	if (endPage < totalPages) {
-		var nextButton = document.createElement("a");
-		nextButton.href = "#";
-		nextButton.textContent = ">";
-		nextButton.classList.add("pagination-button");
-		nextButton.addEventListener("click", function (event) {
-			event.preventDefault();
-			window.currentPage = window.currentPage + 1;
-			showList();
-			renderPagination(totalItem, window.currentPage, itemsPerPage);
-		});
+	//Function for detele entry
+	function deleteEntry(id) {
+		// Retrieve existing data from localStorage
+		var existingData = JSON.parse(localStorage.getItem("formData")) || [];
+
+		// Remove the entry at the specified id
+		existingData.splice(id, 1);
+
+		// Save updated data to localStorage
+		localStorage.setItem("formData", JSON.stringify(existingData));
+
+		// Show the updated list
+		showList();
+		// renderPagination();
 	}
-
-	if (endPage < totalPages) {
-		var lastButton = document.createElement("a");
-		lastButton.href = "#";
-		lastButton.textContent = totalPages;
-		lastButton.classList.add("pagination-button");
-		lastButton.addEventListener("click", function (event) {
-			event.preventDefault();
-			window.currentPage = totalPages;
-			showList();
-			renderPagination(totalItem, window.currentPage, itemsPerPage);
-		});
-		paginationElement.appendChild(morePagesbuttonNext);
-		paginationElement.appendChild(lastButton);
-		paginationElement.appendChild(nextButton);
-	}
-}
-
-//Function for detele entry
-function deleteEntry(id) {
-	// Retrieve existing data from localStorage
-	var existingData = JSON.parse(localStorage.getItem("formData")) || [];
-
-	// Remove the entry at the specified id
-	existingData.splice(id, 1);
-
-	// Save updated data to localStorage
-	localStorage.setItem("formData", JSON.stringify(existingData));
-
-	// Show the updated list
-	showList();
-	// renderPagination();
-}
-
 });
 // showList();
 // renderPagination();
@@ -217,9 +215,9 @@ function openEditModal(id) {
 
 	// Show the edit modal
 	// $("#editModal").modal("show");
-    $('#editModal').on('hidden.bs.modal', function () {
-        // window.alert('hidden event fired!');
-      });
+	$("#editModal").on("hidden.bs.modal", function () {
+		// window.alert('hidden event fired!');
+	});
 }
 
 //Modal form submission
@@ -293,6 +291,9 @@ function submitEditForm(event) {
 		// Hide the modal
 		$("#editModal").modal("hide");
 
+		// close modal
+		modalCloseButton.click();
+
 		// Refresh the list
 		showList();
 		// renderPagination();
@@ -324,8 +325,6 @@ function validatePassword(password) {
 	const passwordRegex = /^(?=.*\d)[a-zA-Z0-9]{4,}$/;
 	return passwordRegex.test(password);
 }
-
-
 
 var searchItem = [];
 function searchForm(event) {
@@ -410,7 +409,9 @@ function searchEntries(searchInput) {
 			person.gender.toLowerCase() === searchGender.toLowerCase();
 		console.log("genderMatch =>", genderhMatch);
 
-		return nameMatch && emailMatch && phoneMatch && dateOfBrithMatch && genderhMatch;
+		return (
+			nameMatch && emailMatch && phoneMatch && dateOfBrithMatch && genderhMatch
+		);
 	});
 	if (searchResults.length > 0) {
 		console.log("searFound =>", searchResults.length);
@@ -425,6 +426,3 @@ function searchEntries(searchInput) {
 		return [];
 	}
 }
-
-
-
