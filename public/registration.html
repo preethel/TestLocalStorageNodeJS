@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMS</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css"
+        rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item ">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/signIn">Sign In</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/registration">Registration <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/registered">Employee List</a>
+            </li>
+    
+          </ul>
+        </div>
+      </nav>
+    <div class="container content">
+        <div id="registration">
+
+            <div class="row" style="display: flex; ">
+                <div id="left" class="col-md-6" style="flex: 1;">
+                    <br>
+                    <br>
+                    <br>
+                    <h1 style="font-family:Ink Free; text-align: center; font-size:100px; color: #ff6c28;">Welcome to
+                        our
+                        Website!
+                    </h1>
+                    <p style="font-family:'MV Boli'; text-align: center; font-size:50px; color: #f0f0f0;">To know about
+                        our
+                        update
+                        stay with us!</p>
+                </div>
+                <div style="width: 1px; background-color: #d8d8d8d0;"></div>
+                <div id="right" class="col-md-6" style="flex: 1; background-color: #ff4800b7;">
+                    <h5>Employee Management System</h5>
+                    <hr>
+                    <!----------Form Input--------------->
+                    <form id="myForm" onsubmit="submitForm(event)">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="name">First Name</label>
+                                <input type="text" name="fname" class="form-control" id="fname"
+                                    placeholder="First Name">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="name">Last Name</label>
+                                <input type="text" name="lname" class="form-control" id="lname" placeholder="Last Name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail">Email</label>
+                            <input type="email" name="email" class="form-control" id="email" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Birth Date</label>
+                            <div class="input-group">
+                                <input type="text" name="date" class="form-control" id="date" class="date form-control"
+                                    placeholder="Enter date">
+                                <span class="input-group-text">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPhone">Phone</label>
+                            <input type="tel" name="phone" placeholder="Phone" maxlength="11" class="form-control"
+                                id="number">
+                            <small></small>
+                        </div>
+                        <div class="form-group">
+                            <label>Gender:</label>
+                            <div class="form-check">
+                                <input type="checkbox" id="male" name="gender" value="male" class="form-check-input"
+                                    onclick="updateCheckbox(this)">
+                                <label for="male" class="form-check-label">Male</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="female" name="gender" value="female" class="form-check-input"
+                                    onclick="updateCheckbox(this)">
+                                <label for="female" class="form-check-label">Female</label>
+                            </div>
+                        </div>
+                        <div class="form-floating">
+                            <label for="comment">Comments</label>
+                            <textarea class="form-control" placeholder="Leave a comment here" id="comment"
+                                style="height: 100px"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword4">Password</label>
+                            <input type="password" name="password" class="form-control" id="password"
+                                placeholder="Password">
+                        </div>
+                        <button type="submit" class="btn btn-block btn-danger" value="submit">Submit</button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <script src="registration.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+
+    <style>
+        .active {
+            font-weight: bold;
+            background-color: lightblue;
+            color: darkblue;
+        }
+
+        .pagination-button {
+            padding: 5px 10px;
+            border: 1px solid #ededed
+        }
+    </style>
+    <script type="text/javascript">
+        $('#date').datepicker({
+            format: 'dd-mm-yy',
+            autoclose: true,
+        });
+        
+    </script>
+</body>
+
+</html>
