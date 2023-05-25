@@ -1,4 +1,5 @@
 let submitEditForm;
+
 function updateCheckbox(checkbox) {
     var checkboxes = document.getElementsByName("gender");
 
@@ -10,7 +11,7 @@ function updateCheckbox(checkbox) {
         });
     }
 }
-// submitEditForm(event);
+
 document.addEventListener('DOMContentLoaded', () => {
     //Registration Form Submission
     submitForm = function (event) {
@@ -83,8 +84,15 @@ document.addEventListener('DOMContentLoaded', () => {
 	if (checkValid != 1) {
 		console.log("Validation Error!");
 	} else {
+		// Retrieve existing data from localStorage or initialize empty array
+		var existingData = JSON.parse(localStorage.getItem("formData")) || [];
+		var endId = existingData.length - 1; 
+		var entry = existingData[endId];
+		var tempId = entry.uid;
+		const uID = tempId + 1;
 		var entry = {
-			fristName: fname,
+			uid : uID,
+			firstName: fname,
 			lastName: lname,
 			email: email,
 			dateOfBrith: date,
@@ -93,10 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			comment: comment,
 			password: password,
 		};
-		//Regular Expression validation
-
-		// Retrieve existing data from localStorage or initialize empty array
-		var existingData = JSON.parse(localStorage.getItem("formData")) || [];
+		
 
 		// Add new entry to existing data
 		existingData.push(entry);

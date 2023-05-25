@@ -34,12 +34,14 @@
               <a class="nav-link" href="/signIn">Sign In</a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" href="/registration">Registration <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="/registration">Registration</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/registered">Employee List</a>
             </li>
-    
+            <li class="nav-item" id="logout">
+                <a class="nav-link" href="/registered">Logout</a>
+            </li>
           </ul>
         </div>
       </nav>
@@ -51,18 +53,18 @@
                     <br>
                     <br>
                     <br>
-                    <h1 style="font-family:Ink Free; text-align: center; font-size:100px; color: #ff6c28;">Welcome to
+                    <h1 style="font-family:Ink Free; text-align: center; font-size:100px; color: #ff0000;">Welcome to
                         our
                         Website!
                     </h1>
-                    <p style="font-family:'MV Boli'; text-align: center; font-size:50px; color: #f0f0f0;">To know about
+                    <p style="font-family:'MV Boli'; text-align: center; font-size:50px; color: #000000;">To know about
                         our
                         update
                         stay with us!</p>
                 </div>
-                <div style="width: 1px; background-color: #d8d8d8d0;"></div>
-                <div id="right" class="col-md-6" style="flex: 1; background-color: #ff4800b7;">
-                    <h5>Employee Management System</h5>
+                <div style="width: 1px; background-color: #ffffff;"></div>
+                <div id="right" class="col-md-6" style="flex: 1; background-color: #ffffff;">
+                    <h5 class="text-primary">Employee Management System</h5>
                     <hr>
                     <!----------Form Input--------------->
                     <form id="myForm" onsubmit="submitForm(event)">
@@ -134,15 +136,11 @@
         crossorigin="anonymous"></script>
 
     <style>
-        .active {
-            font-weight: bold;
-            background-color: lightblue;
-            color: darkblue;
-        }
+        
 
         .pagination-button {
             padding: 5px 10px;
-            border: 1px solid #ededed
+            border: 1px solid #575757
         }
     </style>
     <script type="text/javascript">

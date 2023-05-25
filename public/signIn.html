@@ -1,46 +1,123 @@
 <!DOCTYPE html>
+<html>
 
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EMS</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css"
-        rel="stylesheet" />
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      rel="stylesheet" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css"
+      rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
-<title>Home</title>
-</head>
-<body>
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+  </head>
+
+  <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item ">
-              <a class="nav-link" href="/">Home</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="/signIn">Sign In <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/registration">Registration</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/registered">Employee List</a>
-            </li>
-    
-          </ul>
+      <a class="navbar-brand" href="#">Navbar</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item ">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/signIn">Sign In</a>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link" href="/registration">Registration</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/registered">Employee List</a>
+          </li>
+          <li class="nav-item" id="logout">
+            <a class="nav-link" href="/registered">Logout</a>
+        </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container-fluid vh-100" style="margin-top:50px">
+      <div class style="margin-top:50px">
+        <div class="rounded d-flex justify-content-center">
+          <div class="col-md-4 col-sm-12 shadow-lg p-5 bg-light">
+            <div class="text-center">
+              <h3 class="text-primary">Sign In</h3>
+            </div>
+            <form id="signinForm" onsubmit="signinForm(event)">
+              <div class="p-4">
+                <div class="input-group mb-3">
+                  <span class="input-group-text bg-primary"><i
+                      class="bi bi-person-plus-fill text-white"></i></span>
+                  <input type="number" id="userId" class="form-control"
+                    placeholder="User Id">
+                </div>
+                <div class="input-group mb-3">
+                  <span class="input-group-text bg-primary"><i
+                      class="bi bi-key-fill text-white"></i></span>
+                  <input type="password" class="form-control" id="password"
+                    placeholder="password">
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value
+                    id="flexCheckDefault">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Remember Me
+                  </label>
+                </div>
+                <button value="submit" class="btn btn-primary text-center mt-2" type="submit">
+                  Login
+                </button>
+                <p class="text-center mt-5">Don't have an account?
+                  <span class="text-primary">
+                    <a href="/registration">Sign Up</a></span>
+                </p>
+                <!-- <p class="text-center text-primary">Forgot your password?</p> -->
+              </div>
+            </form>
+          </div>
         </div>
-      </nav>
-</body>
+      </div>
+    </div>
+
+    <script src="signIn.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+      crossorigin="anonymous"></script>
+
+    <style>
+
+
+        .pagination-button {
+            padding: 5px 10px;
+            border: 1px solid #575757
+        }
+    </style>
+    <script type="text/javascript">
+        $('#date').datepicker({
+            format: 'dd-mm-yy',
+            autoclose: true,
+        });
+        
+    </script>
+  </body>
+
+</html>

@@ -1,5 +1,8 @@
 const modalCloseButton = document.getElementById("closeModal");
-
+function logout(){
+	localStorage.setItem("currentUser", JSON.stringify([]));
+	document.getElementById("logout").style.display = "none";
+}
 var currentPage = 1;
 let showList;
 document.addEventListener("DOMContentLoaded", () => {
@@ -12,6 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	var buttonsToShow = 3;
 
 	showList = function () {
+		var currentUser = JSON.parse(localStorage.getItem("currentUser")) || [];
+
 		var users = JSON.parse(localStorage.getItem("formData")) || [];
 		userListElement.innerHTML = "";
 		var totalItem = users.length;
@@ -31,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			// existing code to create table rows
 			var row = document.createElement("tr");
 			var nameCell = document.createElement("td");
-			var fname = entry.fristName;
+			var fname = entry.firstName;
 			var lname = entry.lastName;
 
 			var name = fname.concat(" " + lname);
@@ -76,7 +81,15 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 		renderPagination(totalItem, currentPage, itemsPerPage);
 	};
-	showList();
+	var currentUser = JSON.parse(localStorage.getItem("currentUser")) || [];
+	console.log("cU => ", currentUser.uid);
+	if (currentUser.uid > 0) {
+		document.getElementById("logout").style.display = "block";
+		showList();
+	} else {
+		document.getElementById("empList").style.display = "none";
+		document.getElementById("notFound").style.display = "block";
+	}
 
 	function renderPagination(totalItem, currentPage, itemsPerPage) {
 		paginationElement.innerHTML = "";
@@ -167,6 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				showList();
 				renderPagination(totalItem, window.currentPage, itemsPerPage);
 			});
+			// firstButton.textContent = "1..";
 			paginationElement.appendChild(morePagesbuttonNext);
 			paginationElement.appendChild(lastButton);
 			paginationElement.appendChild(nextButton);
@@ -200,7 +214,7 @@ function openEditModal(id) {
 
 	// Populate the edit form with the entry data
 	var editForm = document.getElementById("editForm");
-	editForm.elements["editFname"].value = entry.fristName;
+	editForm.elements["editFname"].value = entry.firstName;
 	editForm.elements["editLname"].value = entry.lastName;
 	editForm.elements["editEmail"].value = entry.email;
 	editForm.elements["editPhone"].value = entry.phone;
@@ -277,7 +291,7 @@ function submitEditForm(event) {
 	} else {
 		// Retrieve existing data from localStorage
 		var existingData = JSON.parse(localStorage.getItem("formData")) || [];
-		existingData[id].fristName = fname;
+		existingData[id].firstName = fname;
 		existingData[id].lastName = lname;
 		existingData[id].email = email;
 		existingData[id].phone = phone;
@@ -350,7 +364,7 @@ function searchForm(event) {
 	gender = gender.toLowerCase();
 
 	searchItem = {
-		fristName: name,
+		firstName: name,
 		lastName: name,
 		email: email,
 		phone: phone,
@@ -365,8 +379,8 @@ function searchEntries(searchInput) {
 	var existingData = JSON.parse(localStorage.getItem("formData")) || [];
 	var searchResults = [];
 
-	const searchFirstName = searchInput.fristName
-		? searchInput.fristName.toLowerCase()
+	const searchFirstName = searchInput.firstName
+		? searchInput.firstName.toLowerCase()
 		: null;
 	const searchLastName = searchInput.lastName
 		? searchInput.lastName.toLowerCase()
@@ -392,7 +406,7 @@ function searchEntries(searchInput) {
 		const nameMatch =
 			!searchFirstName ||
 			!searchLastName ||
-			person.fristName
+			person.firstName
 				.toLowerCase()
 				.startsWith(searchFirstName.toLowerCase()) ||
 			person.lastName.toLowerCase().startsWith(searchLastName.toLowerCase());
