@@ -10,19 +10,17 @@ document.addEventListener("DOMContentLoaded", () => {
 	var paginationElement = document.getElementById("pagination");
 	var searchButton = document.getElementById("searchForm");
 	searchForm;
-	var itemsPerPage = 2;
+	var itemsPerPage = 1;
 
 	var buttonsToShow = 3;
 
 	showList = function () {
-		var currentUser = JSON.parse(localStorage.getItem("currentUser")) || [];
-
 		var users = JSON.parse(localStorage.getItem("formData")) || [];
 		userListElement.innerHTML = "";
 		var totalItem = users.length;
 		var startIndex = (currentPage - 1) * itemsPerPage;
-		console.log("start Index =>", startIndex);
-		console.log("Current page =>", currentPage);
+		//console.log("start Index =>", startIndex);
+		//console.log("Current page =>", currentPage);
 		var endIndex = startIndex + itemsPerPage;
 		var paginatedData = users.slice(startIndex, endIndex);
 
@@ -82,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		renderPagination(totalItem, currentPage, itemsPerPage);
 	};
 	var currentUser = JSON.parse(localStorage.getItem("currentUser")) || [];
-	console.log("cU => ", currentUser.uid);
+	//console.log("cU => ", currentUser.uid);
 	if (currentUser.uid > 0) {
 		document.getElementById("logout").style.display = "block";
 		showList();
@@ -97,14 +95,21 @@ document.addEventListener("DOMContentLoaded", () => {
 		var totalPages = Math.ceil(totalItem / itemsPerPage);
 		var startPage = Math.max(1, currentPage - Math.floor(buttonsToShow / 2));
 		var endPage = Math.min(startPage + buttonsToShow - 1, totalPages);
+		
+		var prevButton = document.createElement("a");
+		prevButton.href = "#";
+		prevButton.textContent = "<";
+		prevButton.classList.add("pagination-button");
+		paginationElement.appendChild(prevButton);
+		if (startPage < endPage && currentPage > 1) {
+			prevButton.addEventListener("click", function (event) {
+				event.preventDefault();
+				window.currentPage = window.currentPage - 1;
+				showList();
+				renderPagination(totalItem, window.currentPage, itemsPerPage);
+			});
+		}
 
-		var morePagesbuttonPrev = document.createElement("span");
-		var morePagesbuttonNext = document.createElement("span");
-
-		morePagesbuttonPrev.textContent = "...";
-		morePagesbuttonPrev.className = "pagination-button";
-		morePagesbuttonNext.textContent = "...";
-		morePagesbuttonNext.className = "pagination-button";
 
 		if (startPage > 1) {
 			var firstButton = document.createElement("a");
@@ -117,22 +122,11 @@ document.addEventListener("DOMContentLoaded", () => {
 				showList();
 				renderPagination(totalItem, window.currentPage, itemsPerPage);
 			});
-
-			if (startPage > 2) {
-				var prevButton = document.createElement("a");
-				prevButton.href = "#";
-				prevButton.textContent = "<";
-				prevButton.classList.add("pagination-button");
-				prevButton.addEventListener("click", function (event) {
-					event.preventDefault();
-					window.currentPage = window.currentPage - 1;
-					showList();
-					renderPagination(totalItem, window.currentPage, itemsPerPage);
-				});
-				paginationElement.appendChild(prevButton);
-			}
+			
 			paginationElement.appendChild(firstButton);
-			paginationElement.appendChild(morePagesbuttonPrev);
+			if(currentPage > 3){
+				firstButton.textContent = "1..";
+			}
 		}
 
 		for (var i = startPage; i <= endPage; i++) {
@@ -148,25 +142,12 @@ document.addEventListener("DOMContentLoaded", () => {
 			pageLink.addEventListener("click", function (event) {
 				event.preventDefault();
 				window.currentPage = parseInt(event.target.textContent);
-				console.log("current Page next", window.currentPage);
+				// //console.log("current Page next", window.currentPage);
 				showList();
 				renderPagination(totalItem, window.currentPage, itemsPerPage);
 			});
 
 			paginationElement.appendChild(pageLink);
-		}
-
-		if (endPage < totalPages) {
-			var nextButton = document.createElement("a");
-			nextButton.href = "#";
-			nextButton.textContent = ">";
-			nextButton.classList.add("pagination-button");
-			nextButton.addEventListener("click", function (event) {
-				event.preventDefault();
-				window.currentPage = window.currentPage + 1;
-				showList();
-				renderPagination(totalItem, window.currentPage, itemsPerPage);
-			});
 		}
 
 		if (endPage < totalPages) {
@@ -180,11 +161,28 @@ document.addEventListener("DOMContentLoaded", () => {
 				showList();
 				renderPagination(totalItem, window.currentPage, itemsPerPage);
 			});
-			// firstButton.textContent = "1..";
-			paginationElement.appendChild(morePagesbuttonNext);
+			if(!(currentPage+2 >= totalPages)){
+				// firstButton.textContent = "1..";
+				lastButton.textContent = `..${totalPages}`;
+			}
 			paginationElement.appendChild(lastButton);
-			paginationElement.appendChild(nextButton);
+
 		}
+
+		var nextButton = document.createElement("a");
+		nextButton.href = "#";
+		nextButton.textContent = ">";
+		nextButton.classList.add("pagination-button");
+	    paginationElement.appendChild(nextButton);
+		if (endPage > currentPage) {
+			nextButton.addEventListener("click", function (event) {
+				event.preventDefault();
+				window.currentPage = window.currentPage + 1;
+				showList();
+				renderPagination(totalItem, window.currentPage, itemsPerPage);
+			});
+		}
+		
 	}
 
 	//Function for detele entry
@@ -398,11 +396,11 @@ function searchEntries(searchInput) {
 		? searchInput.gender.toLowerCase()
 		: null;
 
-	console.log("searchGender =>", searchGender);
+	//console.log("searchGender =>", searchGender);
 
 	const clonedData = [...existingData];
 	searchResults = clonedData.filter((person) => {
-		console.log("dateOfBrith =>", person.gender);
+		//console.log("dateOfBrith =>", person.gender);
 		const nameMatch =
 			!searchFirstName ||
 			!searchLastName ||
@@ -421,20 +419,20 @@ function searchEntries(searchInput) {
 		const genderhMatch =
 			!searchGender ||
 			person.gender.toLowerCase() === searchGender.toLowerCase();
-		console.log("genderMatch =>", genderhMatch);
+		//console.log("genderMatch =>", genderhMatch);
 
 		return (
 			nameMatch && emailMatch && phoneMatch && dateOfBrithMatch && genderhMatch
 		);
 	});
 	if (searchResults.length > 0) {
-		console.log("searFound =>", searchResults.length);
+		//console.log("searFound =>", searchResults.length);
 		// Reset form fields
 		document.getElementById("searchForm").reset();
 		return searchResults;
 	} else {
 		alert("No search Found");
-		console.log("searFound =>", searchResults.length);
+		//console.log("searFound =>", searchResults.length);
 		// Reset form fields
 		document.getElementById("searchForm").reset();
 		return [];

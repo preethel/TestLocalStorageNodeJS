@@ -1,5 +1,3 @@
-let submitEditForm;
-
 function updateCheckbox(checkbox) {
     var checkboxes = document.getElementsByName("gender");
 
@@ -11,10 +9,7 @@ function updateCheckbox(checkbox) {
         });
     }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    //Registration Form Submission
-    submitForm = function (event) {
+function submitForm(event) {
 	event.preventDefault(); // Prevent form submission
 
 	// Get form values
@@ -87,8 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		// Retrieve existing data from localStorage or initialize empty array
 		var existingData = JSON.parse(localStorage.getItem("formData")) || [];
 		var endId = existingData.length - 1; 
-		var entry = existingData[endId];
-		var tempId = entry.uid;
+		var lastentry = (!existingData[endId]) ? [] : existingData[endId];
+		var tempId = (!lastentry.uid) ? 0 : lastentry.uid;
 		const uID = tempId + 1;
 		var entry = {
 			uid : uID,
@@ -116,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		document.getElementById("myForm").reset();
 	}
 }
-});
+
 //Validation functions
 function validateRegularExpression(text) {
 	// Regular expression pattern for name validation (only allows letters, spaces, and hyphens)
