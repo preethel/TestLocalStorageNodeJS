@@ -1,19 +1,26 @@
 signinForm = function (event) {
 	event.preventDefault(); 
 
-    var existingData = JSON.parse(localStorage.getItem("formData")) || [];
-    var userIdInput = document.getElementById("userId");
+    var existingUsers = JSON.parse(localStorage.getItem("userData")) || [];
+    var userName = document.getElementById("username");
     var passwordInput = document.getElementById("password");
-
-    var userId = parseInt(userIdInput.value.trim());
+    var existingData = JSON.parse(localStorage.getItem("formData")) || [];
+    var username = userName.value.trim();
     var password = passwordInput.value.trim();
 
-    existingData.forEach(user => {
-        console.log("user.uid", typeof(user.uid));
-        console.log("userId", typeof(userId));
-        if(user.uid === userId && user.password === password){
+    existingUsers.forEach(user => {
+        if(user.username === username && user.password === password){
             alert("Sign in Successful ");
-            var currentUser = user;
+            const uid = user.uid;
+            var currentUser = {
+                firstName : existingData[uid].firstName,
+                lastName : existingData[uid].lastName,
+                email : existingData[uid].email,
+                dateOfBirth : existingData[uid].date,
+                gender : existingData[uid].gender,
+                phone : existingData[uid].phone,
+                comment : existingData[uid].comment,
+            }
             localStorage.setItem("currentUser", JSON.stringify(currentUser));
             window.location.href = '/registered';
         }

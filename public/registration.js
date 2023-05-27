@@ -17,6 +17,7 @@ function submitForm(event) {
 	var lnInput = document.getElementById("lname");
 	var emailInput = document.getElementById("email");
 	var phoneInput = document.getElementById("number");
+	var usernameInput = document.getElementById("username");
 	var passInput = document.getElementById("password");
 	var dateInput = document.getElementById("date");
 	var commentInput = document.getElementById("comment");
@@ -24,6 +25,8 @@ function submitForm(event) {
 
 	var fname = fnInput.value.trim();
 	var lname = lnInput.value.trim();
+	var fullName = fname.concat(" ",lname);
+	var username = usernameInput.value.trim();
 	var email = emailInput.value.trim();
 	var phone = phoneInput.value.trim();
 	var date = dateInput.value.trim();
@@ -80,6 +83,7 @@ function submitForm(event) {
 		console.log("Validation Error!");
 	} else {
 		// Retrieve existing data from localStorage or initialize empty array
+		var existingUsers = JSON.parse(localStorage.getItem("c")) || [];
 		var existingData = JSON.parse(localStorage.getItem("formData")) || [];
 		var endId = existingData.length - 1; 
 		var lastentry = (!existingData[endId]) ? [] : existingData[endId];
@@ -87,22 +91,34 @@ function submitForm(event) {
 		const uID = tempId + 1;
 		var entry = {
 			uid : uID,
+			fullName : fullName,
 			firstName: fname,
 			lastName: lname,
 			email: email,
 			dateOfBrith: date,
 			phone: phone,
 			gender: gender,
-			comment: comment,
-			password: password,
+			comment: comment
 		};
+		var userEntry = {
+			uid : uID,
+			username : username,
+			password : password
+		}
 		
 
 		// Add new entry to existing data
 		existingData.push(entry);
 
+		// Add new entry to existingUsers data
+		existingUsers.push(userEntry);
+
+
 		// Save updated data to localStorage
 		localStorage.setItem("formData", JSON.stringify(existingData));
+
+		// Save updated data to localStorage
+		localStorage.setItem("userData", JSON.stringify(existingUsers));
 
 		// Display success message
 		alert("Form data submitted successfully!");
